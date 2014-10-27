@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Diagnostics;
+using NUnit.Framework;
 
 namespace NumberTranslator
 {
@@ -50,6 +51,38 @@ namespace NumberTranslator
 			var translator = new Translator();
 
 			Assert.That(translator.NumberProcessing(21), Is.EqualTo("twenty one"));
+		}
+
+		[Test]
+		public void Should_return_twenty_five_when_25_entered()
+		{
+			var translator = new Translator();
+
+			Assert.That(translator.NumberProcessing(25), Is.EqualTo("twenty five"));
+		}
+
+		[Test]
+		public void Should_return_one_hundred_and_one_when_101_entered()
+		{
+			var translator = new Translator();
+
+			Assert.That(translator.NumberProcessing(101), Is.EqualTo("one hundred and one"));
+		}
+
+		[Test]
+		public void Should_return_one_hundred_and_twenty_one()
+		{
+			var translator = new Translator();
+
+			Assert.That(translator.NumberProcessing(121), Is.EqualTo("one hundred and twenty one"));
+		}
+
+		[Test]
+		public void Should_return_one_hundred_and_ten_when_110_entered()
+		{
+			var translator = new Translator();
+
+			Assert.That(translator.NumberProcessing(110), Is.EqualTo("one hundred and ten"));
 		}
 	}
 }

@@ -14,21 +14,39 @@ namespace NumberTranslator
 				{ 4, "four" },
 				{ 5, "five" },
 				{ 10, "ten" },
-				{ 20, "twenty" }
+				{ 20, "twenty" },
+				{ 100, "one hundred" }
 			};  
 
-		public object NumberProcessing(int number)
+		public string NumberProcessing(int number)
 		{
 			var numberOfDigits = Math.Floor(Math.Log10(number) + 1);
-			if (numberOfDigits > 1)
+			if (numberOfDigits == 2)
 			{
-				var firstDigit = number/10;
-				firstDigit *= 10;
+				var firstDigit = (number/10)*10;
 				var secondDigit = number - firstDigit;
 				if (secondDigit > 0)
 				{
 					return _numbersToWords[firstDigit] + " " + _numbersToWords[secondDigit];
 				}
+			}
+
+			if (numberOfDigits == 3)
+			{
+				var firstDigit = (number/100)*100;
+				var secondDigit = ((number - firstDigit)/10)*10;
+				var thirdDigit = number - firstDigit - secondDigit;
+				if (secondDigit == 0)
+				{
+					return _numbersToWords[firstDigit] + " and " + _numbersToWords[thirdDigit];
+				}
+				if (thirdDigit == 0)
+				{
+					return _numbersToWords[firstDigit] + " and " + _numbersToWords[secondDigit];
+				}
+				return _numbersToWords[firstDigit] + " and " + 
+					_numbersToWords[secondDigit] + " " + 
+					_numbersToWords[thirdDigit];
 			}
 
 			return _numbersToWords[number];
