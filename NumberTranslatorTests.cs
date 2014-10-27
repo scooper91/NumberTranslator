@@ -61,28 +61,28 @@ namespace NumberTranslator
 			Assert.That(translator.NumberProcessing(25), Is.EqualTo("twenty five"));
 		}
 
-		[Test]
-		public void Should_return_one_hundred_and_one_when_101_entered()
+		[TestCase(14, "fourteen")]
+		[TestCase(16, "sixteen")]
+		[TestCase(17, "seventeen")]
+		[TestCase(19, "nineteen")]
+		public void Should_return_teen_numbers(int numberInput, string numberOutput)
 		{
 			var translator = new Translator();
 
-			Assert.That(translator.NumberProcessing(101), Is.EqualTo("one hundred and one"));
+			Assert.That(translator.NumberProcessing(numberInput), Is.EqualTo(numberOutput));
 		}
 
-		[Test]
-		public void Should_return_one_hundred_and_twenty_one()
+		[TestCase(100, "one hundred")]
+		[TestCase(101, "one hundred and one")]
+		[TestCase(110, "one hundred and ten")]
+		[TestCase(111, "one hundred and eleven")]
+		[TestCase(117, "one hundred and seventeen")]
+		[TestCase(200, "two hundred")]
+		public void Should_return_hundreds_numbers(int numberInput, string numberOutput)
 		{
 			var translator = new Translator();
 
-			Assert.That(translator.NumberProcessing(121), Is.EqualTo("one hundred and twenty one"));
-		}
-
-		[Test]
-		public void Should_return_one_hundred_and_ten_when_110_entered()
-		{
-			var translator = new Translator();
-
-			Assert.That(translator.NumberProcessing(110), Is.EqualTo("one hundred and ten"));
+			Assert.That(translator.NumberProcessing(numberInput), Is.EqualTo(numberOutput));
 		}
 	}
 }
