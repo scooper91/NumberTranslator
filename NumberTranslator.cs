@@ -15,38 +15,38 @@ namespace NumberTranslator
 				{ 5, "five" },
 				{ 10, "ten" },
 				{ 20, "twenty" },
-				{ 100, "one hundred" }
-			};  
+			};
 
 		public string NumberProcessing(int number)
 		{
-			var numberOfDigits = Math.Floor(Math.Log10(number) + 1);
+			var numberOfDigits = (int) Math.Floor(Math.Log10(number) + 1);
 			if (numberOfDigits == 2)
 			{
-				var firstDigit = (number/10)*10;
-				var secondDigit = number - firstDigit;
-				if (secondDigit > 0)
+				var tensDigit = (number/10)*10;
+				var unitsDigit = number - tensDigit;
+				if (unitsDigit > 0)
 				{
-					return _numbersToWords[firstDigit] + " " + _numbersToWords[secondDigit];
+					return _numbersToWords[tensDigit] + " " + _numbersToWords[unitsDigit];
 				}
 			}
 
 			if (numberOfDigits == 3)
 			{
-				var firstDigit = (number/100)*100;
-				var secondDigit = ((number - firstDigit)/10)*10;
-				var thirdDigit = number - firstDigit - secondDigit;
-				if (secondDigit == 0)
+				var hundredsDigit = (number/100);
+				var hundredsNumber = hundredsDigit*100;
+				var tensDigit = ((number - hundredsNumber)/10)*10;
+				var unitsDigit = number - hundredsNumber - tensDigit;
+				if (tensDigit == 0)
 				{
-					return _numbersToWords[firstDigit] + " and " + _numbersToWords[thirdDigit];
+					return _numbersToWords[hundredsDigit] + " hundred and " + _numbersToWords[unitsDigit];
 				}
-				if (thirdDigit == 0)
+				if (unitsDigit == 0)
 				{
-					return _numbersToWords[firstDigit] + " and " + _numbersToWords[secondDigit];
+					return _numbersToWords[hundredsDigit] + " hundred and " + _numbersToWords[tensDigit];
 				}
-				return _numbersToWords[firstDigit] + " and " + 
-					_numbersToWords[secondDigit] + " " + 
-					_numbersToWords[thirdDigit];
+				return _numbersToWords[hundredsDigit] + " hundred and " + 
+					_numbersToWords[tensDigit] + " " + 
+					_numbersToWords[unitsDigit];
 			}
 
 			return _numbersToWords[number];
