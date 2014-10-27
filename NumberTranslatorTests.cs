@@ -44,7 +44,7 @@ namespace NumberTranslator
 			Assert.That(translator.NumberProcessing(20), Is.EqualTo("twenty"));
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void Should_return_twenty_one_when_21_entered()
 		{
 			var translator = new Translator();

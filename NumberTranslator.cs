@@ -1,5 +1,5 @@
+using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace NumberTranslator
 {
@@ -19,6 +19,18 @@ namespace NumberTranslator
 
 		public object NumberProcessing(int number)
 		{
+			var numberOfDigits = Math.Floor(Math.Log10(number) + 1);
+			if (numberOfDigits > 1)
+			{
+				var firstDigit = number/10;
+				firstDigit *= 10;
+				var secondDigit = number - firstDigit;
+				if (secondDigit > 0)
+				{
+					return _numbersToWords[firstDigit] + " " + _numbersToWords[secondDigit];
+				}
+			}
+
 			return _numbersToWords[number];
 		}
 	}
