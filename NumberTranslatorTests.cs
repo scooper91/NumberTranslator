@@ -33,8 +33,8 @@ namespace NumberTranslator
 
 		[TestCase(10, "ten")]
 		[TestCase(20, "twenty")]
-		[TestCase(22, "twenty two")]
-		[TestCase(29, "twenty nine")]
+		[TestCase(52, "fifty two")]
+		[TestCase(79, "seventy nine")]
 		public void Should_return_two_digit_numbers(int numberInput, string numberOutput)
 		{
 			Assert.That(_translator.NumberProcessing(numberInput), Is.EqualTo(numberOutput));
@@ -47,6 +47,15 @@ namespace NumberTranslator
 		[TestCase(117, "one hundred and seventeen")]
 		[TestCase(200, "two hundred")]
 		public void Should_return_hundreds_numbers(int numberInput, string numberOutput)
+		{
+			Assert.That(_translator.NumberProcessing(numberInput), Is.EqualTo(numberOutput));
+		}
+
+		[TestCase(1000, "one thousand")]
+		[TestCase(1100, "one thousand one hundred")]
+		[TestCase(1110, "one thousand one hundred and ten")]
+		[TestCase(1117, "one thousand one hundred and seventeen")]
+		public void Should_return_thousands_numbers(int numberInput, string numberOutput)
 		{
 			Assert.That(_translator.NumberProcessing(numberInput), Is.EqualTo(numberOutput));
 		}
