@@ -4,13 +4,14 @@ namespace NumberTranslator
 {
 	public class Translator
 	{
-		private readonly NumbersToWordsCalculator _numbersToWordsCalculator = new NumbersToWordsCalculator();
+		private readonly NumbersToWordsDictionary _numbersToWordsDictionary = new NumbersToWordsDictionary();
+		private string _hundredText;
 
 		public string NumberProcessing(int number)
 		{
-			if (_numbersToWordsCalculator.NumbersToWords.ContainsKey(number))
+			if (DictionaryContains(number))
 			{
-				return _numbersToWordsCalculator.NumbersToWords[number];
+				return AddNumberToDictionary(number);
 			}
 
 			var numberOfDigits = (int)Math.Floor(Math.Log10(number) + 1);
@@ -25,17 +26,19 @@ namespace NumberTranslator
 				}
 				if (unitsDigit > 0)
 				{
-					return AddTensToDictionary(tensDigit) + " " +
-						AddUnitsToDictionary(unitsDigit);
+					return AddTensToDictionary(tensDigit) + " " + AddUnitsToDictionary(unitsDigit);
 				}
 			}
 
 			if (numberOfDigits == 3)
 			{
+				_hundredText = " hundred and ";
+
 				var hundredsDigit = (number / 100);
 				var hundredsNumber = hundredsDigit * 100;
 				var tensDigit = ((number - hundredsNumber) / 10) * 10;
 				var unitsDigit = number - hundredsNumber - tensDigit;
+
 				if (tensDigit == 0 && unitsDigit == 0)
 				{
 					return AddHundredsToDictionary(hundredsDigit) + " hundred";
@@ -43,45 +46,55 @@ namespace NumberTranslator
 				if (tensDigit == 10)
 				{
 					var tensNumber = tensDigit + unitsDigit;
-					if (_numbersToWordsCalculator.NumbersToWords.ContainsKey(tensNumber))
+					if (DictionaryContains(tensNumber))
 					{
-						return AddHundredsToDictionary(hundredsDigit) + " hundred and " +
+						return AddHundredsToDictionary(hundredsDigit) + _hundredText +
 						AddTensToDictionary(tensNumber);
 					}
-					return AddHundredsToDictionary(hundredsDigit) + " hundred and " +
+					return AddHundredsToDictionary(hundredsDigit) + _hundredText +
 						AddUnitsToDictionary(unitsDigit) + "teen";
 				}
 				if (tensDigit == 0)
 				{
-					return AddHundredsToDictionary(hundredsDigit) + " hundred and " +
+					return AddHundredsToDictionary(hundredsDigit) + _hundredText +
 						AddUnitsToDictionary(unitsDigit);
 				}
 				if (unitsDigit == 0)
 				{
-					return AddHundredsToDictionary(hundredsDigit) + " hundred and " +
+					return AddHundredsToDictionary(hundredsDigit) + _hundredText +
 						AddTensToDictionary(tensDigit);
 				}
-				return AddHundredsToDictionary(hundredsDigit) + " hundred and " +
+				return AddHundredsToDictionary(hundredsDigit) + _hundredText +
 					AddTensToDictionary(tensDigit) + " " +
 					AddUnitsToDictionary(unitsDigit);
 			}
 
-			return _numbersToWordsCalculator.NumbersToWords[number];
+			return "";
+		}
+
+		private bool DictionaryContains(int number)
+		{
+			return _numbersToWordsDictionary.NumbersToWords.ContainsKey(number);
+		}
+
+		private string AddNumberToDictionary(int number)
+		{
+			return _numbersToWordsDictionary.NumbersToWords[number];
 		}
 
 		private string AddHundredsToDictionary(int hundredsDigit)
 		{
-			return _numbersToWordsCalculator.NumbersToWords[hundredsDigit];
+			return _numbersToWordsDictionary.NumbersToWords[hundredsDigit];
 		}
 
 		private string AddTensToDictionary(int tensDigit)
 		{
-			return _numbersToWordsCalculator.NumbersToWords[tensDigit];
+			return _numbersToWordsDictionary.NumbersToWords[tensDigit];
 		}
 
 		private string AddUnitsToDictionary(int unitsDigit)
 		{
-			return _numbersToWordsCalculator.NumbersToWords[unitsDigit];
+			return _numbersToWordsDictionary.NumbersToWords[unitsDigit];
 		}
 	}
 }

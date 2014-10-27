@@ -42,7 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="NumbersToWordsCalculator.cs" />
+    <Compile Include="NumbersToWordsDictionary.cs" />
     <Compile Include="NumberTranslator.cs" />
     <Compile Include="NumberTranslatorTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

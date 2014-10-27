@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace NumberTranslator
 {
-	public class NumbersToWordsCalculator
+	public class NumbersToWordsDictionary
 	{
 		public readonly Dictionary<int,string> NumbersToWords = new Dictionary<int, string>
 			{
