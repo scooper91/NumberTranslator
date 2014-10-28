@@ -55,6 +55,7 @@ namespace NumberTranslator
 		[TestCase(1100, "one thousand one hundred")]
 		[TestCase(1110, "one thousand one hundred and ten")]
 		[TestCase(1117, "one thousand one hundred and seventeen")]
+		[TestCase(1013, "one thousand and thirteen")]
 		public void Should_return_thousands_numbers(int numberInput, string numberOutput)
 		{
 			Assert.That(_translator.NumberProcessing(numberInput), Is.EqualTo(numberOutput));

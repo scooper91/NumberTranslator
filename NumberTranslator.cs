@@ -5,13 +5,12 @@ namespace NumberTranslator
 	public class Translator
 	{
 		private readonly NumbersToWordsDictionary _numbersToWordsDictionary = new NumbersToWordsDictionary();
-		private string _hundredText;
 
 		public string NumberProcessing(int number)
 		{
 			if (DictionaryContains(number))
 			{
-				return AddNumberToDictionary(number);
+				return AddNumberToOutput(number);
 			}
 
 			var numberOfDigits = (int)Math.Floor(Math.Log10(number) + 1);
@@ -22,18 +21,16 @@ namespace NumberTranslator
 				var unitsDigit = number - tensDigit;
 				if (tensDigit == 10)
 				{
-					return AddUnitsToDictionary(unitsDigit) + "teen";
+					return AddUnitsToOutput(unitsDigit) + "teen";
 				}
 				if (unitsDigit > 0)
 				{
-					return AddTensToDictionary(tensDigit) + " " + AddUnitsToDictionary(unitsDigit);
+					return AddTensToOutput(tensDigit) + " " + AddUnitsToOutput(unitsDigit);
 				}
 			}
 
 			if (numberOfDigits == 3)
 			{
-				_hundredText = " hundred and ";
-
 				var hundredsDigit = (number / 100);
 				var hundredsNumber = hundredsDigit * 100;
 				var tensDigit = ((number - hundredsNumber) / 10) * 10;
@@ -41,32 +38,32 @@ namespace NumberTranslator
 
 				if (tensDigit == 0 && unitsDigit == 0)
 				{
-					return AddHundredsToDictionary(hundredsDigit) + " hundred";
+					return AddHundredsToOutput(hundredsDigit) + " hundred";
 				}
 				if (tensDigit == 10)
 				{
 					var tensNumber = tensDigit + unitsDigit;
 					if (DictionaryContains(tensNumber))
 					{
-						return AddHundredsToDictionary(hundredsDigit) + _hundredText +
-						AddTensToDictionary(tensNumber);
+						return AddCompleteHundredNumberToOutput(hundredsDigit) +
+						AddTensToOutput(tensNumber);
 					}
-					return AddHundredsToDictionary(hundredsDigit) + _hundredText +
-						AddUnitsToDictionary(unitsDigit) + "teen";
+					return AddCompleteHundredNumberToOutput(hundredsDigit) +
+						AddUnitsToOutput(unitsDigit) + "teen";
 				}
 				if (tensDigit == 0)
 				{
-					return AddHundredsToDictionary(hundredsDigit) + _hundredText +
-						AddUnitsToDictionary(unitsDigit);
+					return AddCompleteHundredNumberToOutput(hundredsDigit) +
+						AddUnitsToOutput(unitsDigit);
 				}
 				if (unitsDigit == 0)
 				{
-					return AddHundredsToDictionary(hundredsDigit) + _hundredText +
-						AddTensToDictionary(tensDigit);
+					return AddCompleteHundredNumberToOutput(hundredsDigit) +
+						AddTensToOutput(tensDigit);
 				}
-				return AddHundredsToDictionary(hundredsDigit) + _hundredText +
-					AddTensToDictionary(tensDigit) + " " +
-					AddUnitsToDictionary(unitsDigit);
+				return AddCompleteHundredNumberToOutput(hundredsDigit) +
+					AddTensToOutput(tensDigit) + " " +
+					AddUnitsToOutput(unitsDigit);
 			}
 
 			if (numberOfDigits == 4)
@@ -77,40 +74,50 @@ namespace NumberTranslator
 				var hundredsNumber = hundredsDigit*100;
 				var teenNumber = number - thousandsNumber - hundredsNumber;
 				var tensDigit = (number - thousandsNumber - hundredsNumber)/10;
-				var tensNumber = tensDigit * 10;
+				var tensNumber = tensDigit*10;
 				var unitsNumber = number - thousandsNumber - hundredsNumber - tensNumber;
 
 				if (hundredsDigit == 0 && tensDigit == 0 && unitsNumber == 0)
 				{
-					return _numbersToWordsDictionary.NumbersToWords[thousandsDigit] + " thousand";
+					return AddThousandsToOutput(thousandsDigit) + " thousand";
 				}
 				if (hundredsDigit != 0)
 				{
 					if (tensNumber == 0)
 					{
-						return AddThousandsToDictionary(thousandsDigit) + " thousand " +
-							AddHundredsToDictionary(hundredsDigit) + " hundred";
+						return AddCompleteThousandsNumberToOutput(thousandsDigit) +
+						       AddHundredsToOutput(hundredsDigit) + " hundred";
 					}
-					if (tensNumber != 0)
+					if (tensNumber != 0 && _numbersToWordsDictionary.NumbersToWords.ContainsKey(teenNumber))
 					{
-						if (_numbersToWordsDictionary.NumbersToWords.ContainsKey(teenNumber))
-						{
-							return AddThousandsToDictionary(thousandsDigit) + " thousand " + 
-								AddHundredsToDictionary(hundredsDigit) +
-								" hundred and " + AddTensToDictionary(teenNumber);
-						}
-						return AddThousandsToDictionary(thousandsDigit) + " thousand " +
-						       AddHundredsToDictionary(hundredsDigit) +
-						       " hundred and " + AddTensToDictionary(unitsNumber) + "teen";
+						return AddCompleteThousandsNumberToOutput(thousandsDigit) +
+							   AddCompleteHundredNumberToOutput(hundredsDigit) + AddTensToOutput(teenNumber);
 					}
 				}
-				
+				if (hundredsDigit == 0)
+				{
+					if (tensNumber != 0 && _numbersToWordsDictionary.NumbersToWords.ContainsKey(teenNumber))
+					{
+						return AddCompleteThousandsNumberToOutput(thousandsDigit) + "and " + AddTensToOutput(teenNumber);
+					}
+				}
+				return AddCompleteThousandsNumberToOutput(thousandsDigit) +
+						   AddCompleteHundredNumberToOutput(hundredsDigit) + AddTensToOutput(unitsNumber) + "teen";
 			}
-
 			return "";
 		}
 
-		private string AddThousandsToDictionary(int thousandsDigit)
+		private string AddCompleteHundredNumberToOutput(int hundredsDigit)
+		{
+			return AddHundredsToOutput(hundredsDigit) + " hundred and ";
+		}
+
+		private string AddCompleteThousandsNumberToOutput(int thousandsDigit)
+		{
+			return AddThousandsToOutput(thousandsDigit) + " thousand ";
+		}
+
+		private string AddThousandsToOutput(int thousandsDigit)
 		{
 			return _numbersToWordsDictionary.NumbersToWords[thousandsDigit];
 		}
@@ -120,22 +127,22 @@ namespace NumberTranslator
 			return _numbersToWordsDictionary.NumbersToWords.ContainsKey(number);
 		}
 
-		private string AddNumberToDictionary(int number)
+		private string AddNumberToOutput(int number)
 		{
 			return _numbersToWordsDictionary.NumbersToWords[number];
 		}
 
-		private string AddHundredsToDictionary(int hundredsDigit)
+		private string AddHundredsToOutput(int hundredsDigit)
 		{
 			return _numbersToWordsDictionary.NumbersToWords[hundredsDigit];
 		}
 
-		private string AddTensToDictionary(int tensDigit)
+		private string AddTensToOutput(int tensDigit)
 		{
 			return _numbersToWordsDictionary.NumbersToWords[tensDigit];
 		}
 
-		private string AddUnitsToDictionary(int unitsDigit)
+		private string AddUnitsToOutput(int unitsDigit)
 		{
 			return _numbersToWordsDictionary.NumbersToWords[unitsDigit];
 		}
