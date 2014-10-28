@@ -21,7 +21,7 @@ namespace NumberTranslator
 				var unitsDigit = number - tensDigit;
 				if (tensDigit == 10)
 				{
-					return AddUnitsToOutput(unitsDigit) + "teen";
+					return AddTeenNumberToOutput(unitsDigit);
 				}
 				if (unitsDigit > 0)
 				{
@@ -49,7 +49,7 @@ namespace NumberTranslator
 						AddTensToOutput(tensNumber);
 					}
 					return AddCompleteHundredNumberToOutput(hundredsDigit) +
-						AddUnitsToOutput(unitsDigit) + "teen";
+						AddTeenNumberToOutput(unitsDigit);
 				}
 				if (tensDigit == 0)
 				{
@@ -102,9 +102,14 @@ namespace NumberTranslator
 					}
 				}
 				return AddCompleteThousandsNumberToOutput(thousandsDigit) +
-						   AddCompleteHundredNumberToOutput(hundredsDigit) + AddTensToOutput(unitsNumber) + "teen";
+						AddCompleteHundredNumberToOutput(hundredsDigit) + AddTeenNumberToOutput(unitsNumber);
 			}
 			return "";
+		}
+
+		private string AddTeenNumberToOutput(int unitsDigit)
+		{
+			return AddUnitsToOutput(unitsDigit) + "teen";
 		}
 
 		private string AddCompleteHundredNumberToOutput(int hundredsDigit)
