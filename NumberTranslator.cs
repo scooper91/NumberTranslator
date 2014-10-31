@@ -8,28 +8,35 @@ namespace NumberTranslator
 
 		public string NumberProcessing(int number)
 		{
-			if (DictionaryContains(number))
-			{
-				return AddNumberToOutput(number);
-			}
-
+			string numberJoiner = "";
 			var numberOfDigits = (int)Math.Floor(Math.Log10(number) + 1);
 
-			if (numberOfDigits == 2)
+			if (DictionaryContains(number))
+			{
+				numberJoiner = AddNumberToOutput(number);
+				Console.WriteLine(numberJoiner);
+				return AddNumberToOutput(number);
+			
+			}
+
+			else if (numberOfDigits == 2)
 			{
 				var tensDigit = (number / 10) * 10;
 				var unitsDigit = number - tensDigit;
 				if (tensDigit == 10)
 				{
+					numberJoiner = AddTeenNumberToOutput(unitsDigit);
 					return AddTeenNumberToOutput(unitsDigit);
 				}
 				if (unitsDigit > 0)
 				{
-					return AddTensToOutput(tensDigit) + " " + AddUnitsToOutput(unitsDigit);
+					numberJoiner = AddNumberToOutput(tensDigit) + " " + AddNumberToOutput(unitsDigit);
+					Console.WriteLine(numberJoiner);
+					return AddNumberToOutput(tensDigit) + " " + AddNumberToOutput(unitsDigit);
 				}
 			}
 
-			if (numberOfDigits == 3)
+			else if (numberOfDigits == 3)
 			{
 				var hundredsDigit = (number / 100);
 				var hundredsNumber = hundredsDigit * 100;
@@ -38,7 +45,7 @@ namespace NumberTranslator
 
 				if (tensDigit == 0 && unitsDigit == 0)
 				{
-					return AddHundredsToOutput(hundredsDigit) + " hundred";
+					return AddNumberToOutput(hundredsDigit) + " hundred";
 				}
 				if (tensDigit == 10)
 				{
@@ -46,7 +53,7 @@ namespace NumberTranslator
 					if (DictionaryContains(tensNumber))
 					{
 						return AddCompleteHundredNumberToOutput(hundredsDigit) +
-						AddTensToOutput(tensNumber);
+						AddNumberToOutput(tensNumber);
 					}
 					return AddCompleteHundredNumberToOutput(hundredsDigit) +
 						AddTeenNumberToOutput(unitsDigit);
@@ -54,19 +61,19 @@ namespace NumberTranslator
 				if (tensDigit == 0)
 				{
 					return AddCompleteHundredNumberToOutput(hundredsDigit) +
-						AddUnitsToOutput(unitsDigit);
+						AddNumberToOutput(unitsDigit);
 				}
 				if (unitsDigit == 0)
 				{
 					return AddCompleteHundredNumberToOutput(hundredsDigit) +
-						AddTensToOutput(tensDigit);
+						AddNumberToOutput(tensDigit);
 				}
 				return AddCompleteHundredNumberToOutput(hundredsDigit) +
-					AddTensToOutput(tensDigit) + " " +
-					AddUnitsToOutput(unitsDigit);
+					AddNumberToOutput(tensDigit) + " " +
+					AddNumberToOutput(unitsDigit);
 			}
 
-			if (numberOfDigits == 4)
+			else if (numberOfDigits == 4)
 			{
 				var thousandsDigit = (number/1000);
 				var thousandsNumber = thousandsDigit*1000;
@@ -79,52 +86,47 @@ namespace NumberTranslator
 
 				if (hundredsDigit == 0 && tensDigit == 0 && unitsNumber == 0)
 				{
-					return AddThousandsToOutput(thousandsDigit) + " thousand";
+					return AddNumberToOutput(thousandsDigit) + " thousand";
 				}
 				if (hundredsDigit != 0)
 				{
 					if (tensNumber == 0)
 					{
 						return AddCompleteThousandsNumberToOutput(thousandsDigit) +
-						       AddHundredsToOutput(hundredsDigit) + " hundred";
+						       AddNumberToOutput(hundredsDigit) + " hundred";
 					}
 					if (tensNumber != 0 && _numbersToWordsDictionary.NumbersToWords.ContainsKey(teenNumber))
 					{
 						return AddCompleteThousandsNumberToOutput(thousandsDigit) +
-							   AddCompleteHundredNumberToOutput(hundredsDigit) + AddTensToOutput(teenNumber);
+							   AddCompleteHundredNumberToOutput(hundredsDigit) + AddNumberToOutput(teenNumber);
 					}
 				}
 				if (hundredsDigit == 0)
 				{
 					if (tensNumber != 0 && _numbersToWordsDictionary.NumbersToWords.ContainsKey(teenNumber))
 					{
-						return AddCompleteThousandsNumberToOutput(thousandsDigit) + "and " + AddTensToOutput(teenNumber);
+						return AddCompleteThousandsNumberToOutput(thousandsDigit) + "and " + AddNumberToOutput(teenNumber);
 					}
 				}
 				return AddCompleteThousandsNumberToOutput(thousandsDigit) +
 						AddCompleteHundredNumberToOutput(hundredsDigit) + AddTeenNumberToOutput(unitsNumber);
 			}
-			return "";
+			return numberJoiner;
 		}
 
 		private string AddTeenNumberToOutput(int unitsDigit)
 		{
-			return AddUnitsToOutput(unitsDigit) + "teen";
+			return AddNumberToOutput(unitsDigit) + "teen";
 		}
 
 		private string AddCompleteHundredNumberToOutput(int hundredsDigit)
 		{
-			return AddHundredsToOutput(hundredsDigit) + " hundred and ";
+			return AddNumberToOutput(hundredsDigit) + " hundred and ";
 		}
 
 		private string AddCompleteThousandsNumberToOutput(int thousandsDigit)
 		{
-			return AddThousandsToOutput(thousandsDigit) + " thousand ";
-		}
-
-		private string AddThousandsToOutput(int thousandsDigit)
-		{
-			return _numbersToWordsDictionary.NumbersToWords[thousandsDigit];
+			return AddNumberToOutput(thousandsDigit) + " thousand ";
 		}
 
 		private bool DictionaryContains(int number)
@@ -135,21 +137,6 @@ namespace NumberTranslator
 		private string AddNumberToOutput(int number)
 		{
 			return _numbersToWordsDictionary.NumbersToWords[number];
-		}
-
-		private string AddHundredsToOutput(int hundredsDigit)
-		{
-			return _numbersToWordsDictionary.NumbersToWords[hundredsDigit];
-		}
-
-		private string AddTensToOutput(int tensDigit)
-		{
-			return _numbersToWordsDictionary.NumbersToWords[tensDigit];
-		}
-
-		private string AddUnitsToOutput(int unitsDigit)
-		{
-			return _numbersToWordsDictionary.NumbersToWords[unitsDigit];
 		}
 	}
 }
